@@ -1,36 +1,59 @@
 import { View, Text, StyleSheet, Image, TextInput } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import pattern from "../../assets/gymperson.jpeg";
 import logo from "../../assets/logoossss.png";
-import { formgroup, head1, head2,label,input,link,link2 } from "../common/formcss";
+import { formgroup, head1, head2, label, input, link, link2 } from "../common/formcss";
 import { button1 } from "../common/button";
 
-const Login = () => {
+const Login = ({ navigation }) => {
+  const [fdata, setfdata] = useState({
+    email: '',
+    password: ''
+  });
+
+  const sendtobackend = () => {
+    console.log(fdata);
+  };
+
   return (
     <View style={styles.container}>
       <Image style={styles.patternbg} source={pattern} />
       <View style={styles.container1}>
         <View style={styles.s1}>
-          <Image style={styles.logo} source={logo} />
-          <Text style={styles.h1}>cult-fit</Text>
+          {/* <Image style={styles.logo} source={logo} /> */}
+          <Text style={styles.h1}>cult-fitssss</Text>
           <Text style={styles.h2}>eat sleep gym repeat</Text>
         </View>
         <View style={styles.s2}>
           <Text style={head1}>Login</Text>
           <Text style={head2}>Sign in to continue</Text>
-          <View style={formgroup }>
+          <View style={formgroup}>
             <Text style={label}>Email</Text>
-            <TextInput style={input} />
+            <TextInput
+              style={input}
+              placeholder="Enter your email"
+              onChangeText={(text) => setfdata({ ...fdata, email: text })}
+            />
           </View>
           <View style={formgroup}>
             <Text style={label}>Password</Text>
-            <TextInput  style={input} />
+            <TextInput
+              secureTextEntry={true}
+              placeholder="Enter your Password"
+              onChangeText={(text) => setfdata({ ...fdata, password: text })}
+              style={input}
+            />
           </View>
           <View style={styles.fp}>
             <Text style={link}>forgot password</Text>
           </View>
-          <Text style={button1}> Login</Text>
-          <Text style={link2}> Don't have an account? <Text style={link}>Create a new account</Text></Text>
+          <Text style={button1} onPress={sendtobackend}>Login</Text>
+          <Text style={link2}>
+            Don't have an account?{" "}
+            <Text style={link} onPress={() => navigation.navigate('SignUp')}>
+              Create a new account
+            </Text>
+          </Text>
         </View>
       </View>
     </View>
@@ -66,13 +89,12 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
   },
-  fp:{
-    display:"flex",
-    alignItems:"flex-end",
-    marginHorizontal:10,
-    marginVertical:5,
-  },    
- 
+  fp: {
+    display: "flex",
+    alignItems: "flex-end",
+    marginHorizontal: 10,
+    marginVertical: 5,
+  },
   patternbg: {
     position: "absolute",
     top: 0,
@@ -87,8 +109,6 @@ const styles = StyleSheet.create({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    // opacity:".2",
-    // backgroundColor:"#CC000000",
     height: "100%",
   },
   logo: {

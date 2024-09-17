@@ -63,6 +63,14 @@ module.exports = {
         paddingVertical:10,
         height:100,
         textAlignVertical:"top"
+      },
+      errormessage:{
+        color:'white',
+        backgroundColor:'#F50057',
+        fontSize:15,
+        textAlign:'center',
+        padding:5,
+        borderRadius:10,
       }
     
     

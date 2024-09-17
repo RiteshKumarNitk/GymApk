@@ -1,11 +1,12 @@
+// import Login from "./src/screens/Login";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
-import Welcome from "./src/screens/Welcome";
-// import Login from "./src/screens/Login";
-import SignUp from "./src/screens/SignUp";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import Welcome from "./src/screens/Welcome";
 import SignIn from "./src/screens/SignIn";
+import SignUp from "./src/screens/SignUp";
+import HomePage from "./src/screens/HomePage";
 
 const Stack = createNativeStackNavigator();
 export default function App() {
@@ -16,16 +17,16 @@ export default function App() {
           name="Welcome"
           component={Welcome}
           options={{
-            // This needs double curly braces
             headerShown: false,
           }}
         />
-        <Stack.Screen name="Login" component={SignIn}  options={{
-            // This needs double curly braces
+        <Stack.Screen name="SignIn" component={SignIn}  options={{
+            headerShown: false,
+          }} />
+        <Stack.Screen name="Homepage" component={HomePage}  options={{
             headerShown: false,
           }} />
         <Stack.Screen name="SignUp" component={SignUp}  options={{
-            // This needs double curly braces
             headerShown: false,
           }} />
       </Stack.Navigator>

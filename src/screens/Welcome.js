@@ -10,7 +10,7 @@ const Welcome = ({ navigation }) => {
       <Image style={styles.patternbg} source={pattern} />
       <View style={styles.container1}>
         <Image style={styles.logo} source={welcomelogo} />
-        <Text style={button1} onPress={()=>navigation.navigate('Login')}>Login </Text>
+        <Text style={button1} onPress={()=>navigation.navigate('SignIn')}>Login </Text>
         <Text style={button1} onPress={()=>navigation.navigate('SignUp')}>Sign Up</Text>
       </View>
     </View>
