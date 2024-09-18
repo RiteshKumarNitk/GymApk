@@ -48,7 +48,7 @@ const SignUp = ({ navigation }) => {
           setErrorMsg("invalid credentials");
         } else if (data.message === "Verification code sent to your email") {
           alert(data.message);
-          navigation.navigate("verification", { userdata: data.udata || [] });
+          navigation.navigate('Verification', { udata: data.udata });
         }
       })
       .catch((error) => {

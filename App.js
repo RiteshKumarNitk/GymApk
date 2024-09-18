@@ -30,7 +30,7 @@ export default function App() {
         <Stack.Screen name="SignUp" component={SignUp}  options={{
             headerShown: false,
           }} />
-        <Stack.Screen name="verification" component={Verification}  options={{
+        <Stack.Screen name="Verification" component={Verification}  options={{
             headerShown: false,
           }} />
       </Stack.Navigator>
