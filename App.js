@@ -7,6 +7,7 @@ import Welcome from "./src/screens/Welcome";
 import SignIn from "./src/screens/SignIn";
 import SignUp from "./src/screens/SignUp";
 import HomePage from "./src/screens/HomePage";
+import Verification from "./src/screens/Verification";
 
 const Stack = createNativeStackNavigator();
 export default function App() {
@@ -27,6 +28,9 @@ export default function App() {
             headerShown: false,
           }} />
         <Stack.Screen name="SignUp" component={SignUp}  options={{
+            headerShown: false,
+          }} />
+        <Stack.Screen name="verification" component={Verification}  options={{
             headerShown: false,
           }} />
       </Stack.Navigator>
