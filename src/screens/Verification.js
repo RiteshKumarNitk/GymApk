@@ -13,81 +13,37 @@ import {
 import { button1 } from "../common/button";
 
 const Verification = ({ navigation, route }) => {
-  const [error, setErrormsg] = useState(null);
+  const { userdata } = route.params || {};
+
+  const [errormsg, setErrormsg] = useState(null);
   const [ActualCode, setActualCode] = useState(null);
-  const [userCode, setUserCode] = useState("");
+  const [userCode, setUserCode] = useState("XXXX");
 
-  // Extracting udata from route.params
-  const { udata } = route.params || {};
-
-  // Get verification code from udata
   const verificationCode =
-    udata?.length > 0 ? udata[0]?.verificationCode : null;
+    userdata?.length > 0 ? userdata[0]?.verificationCode : null;
 
-  // Set the actual code when the component mounts
   useEffect(() => {
-    setActualCode(verificationCode);
-  }, [verificationCode]);
+    setActualCode(userdata[0]?.VerificationCode);
+  }, []);
 
-  //   const Sendtobackend = () => {
-  //     // Check if the userCode is empty
-  //     if (!userCode.trim()) {
-  //       setErrormsg("Please enter the verification code");
-  //       return; // Exit if no code is entered
-  //     }
-
-  //     // Validate the code
-  //     // Convert ActualCode to string and trim userCode
-  //     if (String(ActualCode).trim() === userCode.trim()) {
-  //       const fdata = {
-  //         email: udata[0]?.email,
-  //         password: udata[0]?.password,
-  //         name: udata[0]?.name,
-  //         dob: udata[0]?.dob,
-  //         address: udata[0]?.address,
-  //       };
-
-  //       // Correct the URL and send the request to the backend
-  //       fetch("http://10.0.2.2:3005/signup", {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify(fdata),
-  //       })
-  //         .then((res) => res.json())
-  //         .then((data) => {
-  //           console.log("Backend Response:", data); // Log the full response
-  //           if (data.message === "Verification code sent to your email") {
-  //             alert(data.message);
-  //             navigation.navigate("login");
-  //           } else {
-  //             alert("Something went wrong !! Try Signing Up Again");
-  //           }
-  //         })
-  //         .catch((err) => {
-  //           console.error("Error:", err);
-  //           alert("Server error, please try again later.");
-  //         });
-  //     } else {
-  //       setErrormsg("Invalid Verification Code");
-  //     }
-  //   };
   const Sendtobackend = () => {
     // Check if the userCode is empty
-    if (!userCode.trim()) {
-      setErrormsg("Please enter the verification code");
-      return; // Exit if no code is entered
-    }
+    if (userCode == 'XXXX' || userCode == '') {
+      setErrormsg('Please enter the code');
+      return;
+  }
+    // Log actual and user-entered codes for debugging
+    console.log("Actual Code:", ActualCode);
+    console.log("User Entered Code:", userCode);
 
     // Validate the code
     if (String(ActualCode).trim() === userCode.trim()) {
       const fdata = {
-        email: udata[0]?.email,
-        password: udata[0]?.password,
-        name: udata[0]?.name,
-        dob: udata[0]?.dob,
-        address: udata[0]?.address,
+        email: userdata[0]?.email,
+        password: userdata[0]?.password,
+        name: userdata[0]?.name,
+        dob: userdata[0]?.dob,
+        address: userdata[0]?.address,
       };
 
       // Send the request to the backend
@@ -103,12 +59,10 @@ const Verification = ({ navigation, route }) => {
           console.log("Parsed Data:", data); // Log the full response
 
           // Handle different backend responses
-          if (data.message === "User Registered Successfully") {
+          if (data.message == "User Registered Successfully") {
             alert(data.message);
-            console.log("Parsed Data:", data); // Log the full response
-            navigation.navigate("login");
-          } else if (data.message === "Verification code sent to your email") {
-            console.log("Parsed Data:", data); // Log the full response
+            navigation.navigate("SignIn");
+          } else if (data.message == "Verification code sent to your email") {
             alert(
               "Verification code already sent. Please try registering again."
             );
@@ -116,14 +70,17 @@ const Verification = ({ navigation, route }) => {
             alert("Something went wrong! Try Signing Up Again");
           }
         })
-        .catch((err) => {
-          console.error("Error:", err);
-          alert("Server error, please try again later.");
-        });
-    } else {
-      setErrormsg("Invalid Verification Code");
-    }
+        // .catch((err) => {
+        //   console.error("Error:", err);
+        //   alert("Server error, please try again later.");
+        // });
+    } 
+    else if (userCode != ActualCode) {
+      setErrormsg('Incorrect code');
+      return;
+  }
   };
+
   return (
     <View style={styles.container}>
       <Image style={styles.patternbg} source={pattern} />
@@ -138,7 +95,7 @@ const Verification = ({ navigation, route }) => {
           <Text style={head1}>Verification</Text>
           <Text style={bwmessage}>A code has been sent to your email</Text>
 
-          {error ? <Text style={errormessage}>{error}</Text> : null}
+          {errormsg ? <Text style={errormessage}>{errormsg}</Text> : null}
 
           <View style={formgroup}>
             <Text style={label}>Code</Text>

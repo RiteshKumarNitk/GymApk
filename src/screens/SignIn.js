@@ -23,12 +23,11 @@ const SignIn = ({ navigation }) => {
   const [error, setErrormsg] = useState(null);
   const sendtobackend = () => {
     console.log(fdata);
-    if (fdata.email === "" || fdata.password === "") {
+    if (fdata.email == "" || fdata.password == "") {
       setErrormsg("All fields are required");
       return;
-    }
-    else{
-      fetch("http://10.0.2.2:3005/signin", {
+    } else {
+      fetch("http://10.0.2.2:3005/SignIn", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -37,17 +36,14 @@ const SignIn = ({ navigation }) => {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
-          if(data.error){
+          if (data.error) {
             setErrormsg(data.error);
+          } else {
+            alert("logged successfully");
+ 123
+  
+            navigation.navigate("Homepage");
           }
-          else{
-            // alert('account Login Successfull');
-            navigation.navigate('Homepage')
-          }
-        })
-        .catch((error) => {
-          console.error("Error:", error);
         });
     }
   };
@@ -57,7 +53,6 @@ const SignIn = ({ navigation }) => {
       <Image style={styles.patternbg} source={pattern} />
       <View style={styles.container1}>
         <View style={styles.s1}>
-          {/* <Image style={styles.logo} source={logo} /> */}
           <Text style={styles.h1}>cult-fitssss</Text>
           <Text style={styles.h2}>eat sleep gym repeat</Text>
         </View>
@@ -97,7 +92,7 @@ const SignIn = ({ navigation }) => {
           </Text>
           <Text style={link2}>
             Don't have an account?{" "}
-            <Text style={link} onPress={() => navigation.navigate('SignUp')}>
+            <Text style={link} onPress={() => navigation.navigate("SignUp")}>
               Create a new account
             </Text>
           </Text>

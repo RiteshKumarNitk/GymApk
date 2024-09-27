@@ -29,33 +29,63 @@ const SignUp = ({ navigation }) => {
     dob: "",
     address: "",
   });
-  const [error, setErrorMsg] = useState(null);
+  const [error, setErrormsg] = useState(null);
 
   // In the SignUp component
-  const Sendtobackend = () => {
-    // existing code...
-    fetch("http://10.0.2.2:3005/verify", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(fdata),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("Parsed Data:", data);
-        if (data.error === "Invalid Credentials") {
-          setErrorMsg("invalid credentials");
-        } else if (data.message === "Verification code sent to your email") {
-          alert(data.message);
-          navigation.navigate('Verification', { udata: data.udata });
+  const Sendtobackend = async () => {
+    if (
+      fdata.name === "" ||
+      fdata.email === "" ||
+      fdata.password === "" ||
+      fdata.cpassword === "" ||
+      fdata.dob === "" ||
+      fdata.address === ""
+    ) {
+      setErrormsg("All fields are required");
+      return;
+    } else {
+      if (fdata.password !== fdata.cpassword) {
+        setErrormsg("Password and Confirm Password must be the same");
+        return;
+      } else {
+        try {
+          const response = await fetch("http://10.0.2.2:3005/verify", {  // Corrected URL
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(fdata),
+          });
+  
+          // Check if the response status is okay (200-299)
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+  
+          // Try to parse the JSON response
+          const data = await response.json();
+          console.log("Server response:", data);
+  
+          if (data.error === "Invalid Credentials") {
+            setErrormsg("Invalid Credentials");
+          } else if (data.message === "Verification Code Sent to your Email") {
+            alert(data.message);
+            navigation.navigate("Verification", { userdata: data.udata });
+          } else {
+            setErrormsg("Unexpected response from server");
+          }
+        } catch (error) {
+          console.error("Error during signup process:", error);
+          if (error.name === 'SyntaxError') {
+            setErrormsg("Invalid JSON response from the server");
+          } else {
+            setErrormsg("An error occurred. Please try again.");
+          }
         }
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
+      }
+    }
   };
-
+  
   return (
     <View style={styles.container}>
       <Image style={styles.patternbg} source={pattern} />
@@ -81,7 +111,7 @@ const SignUp = ({ navigation }) => {
               <TextInput
                 style={input1}
                 placeholder="Enter your Name"
-                onFocus={() => setErrorMsg(null)}
+                onFocus={() => setErrormsg(null)}
                 onChangeText={(text) => setfdata({ ...fdata, name: text })}
               />
             </View>
@@ -92,7 +122,7 @@ const SignUp = ({ navigation }) => {
               <TextInput
                 style={input1}
                 placeholder="Enter your Email"
-                onFocus={() => setErrorMsg(null)}
+                onFocus={() => setErrormsg(null)}
                 onChangeText={(text) => setfdata({ ...fdata, email: text })}
               />
             </View>
@@ -103,7 +133,7 @@ const SignUp = ({ navigation }) => {
               <TextInput
                 style={input1}
                 placeholder="Enter your DOB"
-                onFocus={() => setErrorMsg(null)}
+                onFocus={() => setErrormsg(null)}
                 onChangeText={(text) => setfdata({ ...fdata, dob: text })}
               />
             </View>
@@ -115,7 +145,7 @@ const SignUp = ({ navigation }) => {
                 style={input1}
                 placeholder="Enter your Password"
                 secureTextEntry={true}
-                onFocus={() => setErrorMsg(null)}
+                onFocus={() => setErrormsg(null)}
                 onChangeText={(text) => setfdata({ ...fdata, password: text })}
               />
             </View>
@@ -127,7 +157,7 @@ const SignUp = ({ navigation }) => {
                 style={input1}
                 placeholder="Confirm your Password"
                 secureTextEntry={true}
-                onFocus={() => setErrorMsg(null)}
+                onFocus={() => setErrormsg(null)}
                 onChangeText={(text) => setfdata({ ...fdata, cpassword: text })}
               />
             </View>
@@ -137,7 +167,7 @@ const SignUp = ({ navigation }) => {
               <Text style={styles.label}>Address</Text>
               <TextInput
                 style={input1}
-                onFocus={() => setErrorMsg(null)}
+                onFocus={() => setErrormsg(null)}
                 placeholder="Enter your Address"
                 onChangeText={(text) => setfdata({ ...fdata, address: text })}
               />
